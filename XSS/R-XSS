@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XSS-ME</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f2f2f2;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #333333;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            color: #333333;
+        }
+
+        input[type="text"] {
+            padding: 5px;
+            margin: 5px 0;
+            width: 200px;
+        }
+
+        input[type="submit"] {
+            padding: 5px 10px;
+            background-color: #333333;
+            color: #ffffff;
+            border: none;
+            cursor: pointer;
+        }
+
+        .success {
+            color: #008000;
+            margin-top: 10px;
+        }
+
+        .error {
+            color: #ff0000;
+            margin-top: 10px;
+        }
+    </style>
+    <script>
+          <?php
+    $FLAG = "FLAG{BARBAROSSA}";?>
+        (function() {
+            var alerted = false; // Keep track of whether the alert has been shown
+
+            var _old_alert = window.alert;
+            window.alert = function() {
+                if (!alerted) {
+                    alerted = true;
+                    // Run some code when the alert pops up
+                    document.body.innerHTML += "<h2>FLAG IS:</h2>";
+                    _old_alert.apply(window, arguments);
+                    // Delay displaying the flag after the alert is closed
+                    setTimeout(function() {
+                        document.body.innerHTML += "<?php echo $FLAG; ?>";
+                    }, 500);
+                }
+            };
+        })();
+    </script>
+</head>
+<body>
+    <h1>Could you get the flag?!</h1>
+
+    <form method="get">
+        <label for="input">Enter your name:</label>
+        <input type="text" id="input" name="xss" value="">
+        <input type="submit" value="Submit">
+    </form>
+
+    <h2>Submit Flag</h2>
+    <form method="post">
+        <label for="flag">Flag:</label>
+        <input type="text" id="flag" name="flag" value="">
+        <input type="submit" value="Check">
+    </form>
+
+    <?php
+    $FLAG = "FLAG{BARBAROSSA}";
+    if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+        if (isset($_GET['xss'])) {
+            $xss = $_GET['xss'];
+            echo "You injected: <h1>$xss</h1>";
+        }
+    }
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        if (isset($_POST['flag'])) {
+            $submittedFlag = $_POST['flag'];
+            if ($submittedFlag === $FLAG) {
+                echo '<p class="success">Congratulations! You submitted the correct flag.</p>';
+            } else {
+                echo '<p class="error">Sorry, the flag you submitted is incorrect.</p>';
+            }
+        }
+    }
+    ?>
+</body>
+</html>
