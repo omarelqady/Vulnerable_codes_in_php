@@ -51,7 +51,6 @@
     </style>
 </head>
 <body>
-    <h1>Could you get the flag?!</h1>
 
     <form method="get">
         <label for="input">Enter your name:</label>
@@ -61,7 +60,6 @@
 
 
     <?php
-    $FLAG = "FLAG{BARBAROSSA}";
     if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         if (isset($_GET['xss'])) {
             $xss = $_GET['xss'];
