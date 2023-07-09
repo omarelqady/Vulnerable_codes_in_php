@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XSS-ME</title>
+</head>
+<body>
+    <h1>Could you get the flag?!</h1>
+
+    <form>
+        <label for="input">Enter your name:</label>
+        <input type="text" id="input" name="xss" value="">
+        <input type="submit" value="Submit">
+    </form>
+
+    <h2>Stored User Inputs:</h2>
+    <div id="storedInputs"></div>
+
+    <script>
+        document.querySelector('form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            var userInput = document.getElementById('input').value;
+            document.getElementById('storedInputs').innerHTML = '<h3>' + userInput + '</h3>';
+        });
+    </script>
+</body>
+</html>
