@@ -1,4 +1,3 @@
-<!-- HOW Reflacted xss happen in php -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -50,27 +49,6 @@
             margin-top: 10px;
         }
     </style>
-    <script>
-          <?php
-    $FLAG = "FLAG{BARBAROSSA}";?>
-        (function() {
-            var alerted = false; // Keep track of whether the alert has been shown
-
-            var _old_alert = window.alert;
-            window.alert = function() {
-                if (!alerted) {
-                    alerted = true;
-                    // Run some code when the alert pops up
-                    document.body.innerHTML += "<h2>FLAG IS:</h2>";
-                    _old_alert.apply(window, arguments);
-                    // Delay displaying the flag after the alert is closed
-                    setTimeout(function() {
-                        document.body.innerHTML += "<?php echo $FLAG; ?>";
-                    }, 500);
-                }
-            };
-        })();
-    </script>
 </head>
 <body>
     <h1>Could you get the flag?!</h1>
@@ -81,12 +59,6 @@
         <input type="submit" value="Submit">
     </form>
 
-    <h2>Submit Flag</h2>
-    <form method="post">
-        <label for="flag">Flag:</label>
-        <input type="text" id="flag" name="flag" value="">
-        <input type="submit" value="Check">
-    </form>
 
     <?php
     $FLAG = "FLAG{BARBAROSSA}";
@@ -94,16 +66,6 @@
         if (isset($_GET['xss'])) {
             $xss = $_GET['xss'];
             echo "You injected: <h1>$xss</h1>";
-        }
-    }
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        if (isset($_POST['flag'])) {
-            $submittedFlag = $_POST['flag'];
-            if ($submittedFlag === $FLAG) {
-                echo '<p class="success">Congratulations! You submitted the correct flag.</p>';
-            } else {
-                echo '<p class="error">Sorry, the flag you submitted is incorrect.</p>';
-            }
         }
     }
     ?>
