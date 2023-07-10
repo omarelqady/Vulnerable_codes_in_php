@@ -1,5 +1,5 @@
 <?php
-
+//also you can find here an xss <3:
 $role = 'user';
 
 // Set the role value in a cookie
